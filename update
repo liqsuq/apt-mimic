@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+cd $(dirname $0)
+
+if ! which perl >/dev/null; then
+    echo "[ERR] perl isn't installed, exit."
+    exit 1
+fi
+
+if [[ $(whoami) == "root" ]]; then
+    echo "[ERR] script must be run as NON-root user, exit."
+    exit 1
+fi
+
+sed -i "s|set base_path .*|set base_path $(pwd)|" mirror.list
+sed -i "s|set nthreads .*|set nthreads $(nproc)|" mirror.list
+apt-mirror/apt-mirror mirror.list
+LANG=C date > .last.txt

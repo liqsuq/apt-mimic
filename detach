@@ -1,0 +1,21 @@
+#!/bin/bash -e
+
+enable_repo() {
+    lists=$(ls -d /etc/apt/sources.list.d/*.list 2>/dev/null | xargs)
+    for list in ${lists}; do
+        sed -i "s/^#REPO# *//g" ${list}
+    done
+    if [[ -e /etc/apt/sources.list ]]; then
+        sed -i "s/^#REPO# *//g" /etc/apt/sources.list
+    fi
+}
+
+cd $(dirname $0)
+
+if [[ $(whoami) != "root" ]]; then
+    echo "[ERR] script must be run as the root user, exit."
+    exit 1
+fi
+
+enable_repo
+rm -f /etc/apt/sources.list.d/REPO.list
