@@ -1,0 +1,3 @@
+[submodule "apt-mirror"]
+	path = apt-mirror
+	url = https://github.com/apt-mirror/apt-mirror
